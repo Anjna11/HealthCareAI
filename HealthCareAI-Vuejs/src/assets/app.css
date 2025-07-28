@@ -1,0 +1,62 @@
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap');
+
+.fancy-header {
+  height: 66px;
+  background: linear-gradient(90deg, #1a3645, #0f94a5);
+  color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.brand-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 4px;
+  margin-top: 20px;
+}
+
+.header-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: white;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+  margin-bottom: 2px; 
+}
+
+.header-title .accent {
+  color: #e1f5fe;
+}
+
+.header-tagline {
+  font-size: 12px;
+  color: #e0f7fa;
+  line-height: 1.1;
+}
+
+.sidebar-white {
+  font-family: 'Inter', sans-serif;
+  background: white;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.9);
+  height: 1000px;
+  width: 350px;
+  font-size: 14px;
+}
+
+.text-sidebar {
+  color: #1a3645;
+}
+
+.hover-color:hover {
+  color: #112530 !important;
+}
