@@ -62,6 +62,7 @@
 import '/mnt/anjna/workspace/Workspace/HealthCareAI/HealthCareAI-Vuejs/src/assets/app.css' 
 import { ref } from 'vue'
 const filter = ref('')
+const demo1 = ref('')
 
 const columns = [
   { name: 'time', label: 'Visit Time', field: 'time', align: 'left' },
