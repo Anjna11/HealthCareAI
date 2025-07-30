@@ -35,7 +35,68 @@
               :filter="filter"
               flat
             >
+
+            <template v-slot:body-cell-actions="props">
+              <q-td :props="props">
+                <q-btn-dropdown
+                  flat
+                  dense
+                  size="sm"
+                  auto-close
+                >
+                  <q-list>
+                    <q-item clickable v-close-popup @click="viewProfile(props.row)">
+                      <q-item-section avatar><q-icon name="person" /></q-item-section>
+                      <q-item-section>View Profile</q-item-section>
+                    </q-item>
+                  
+                    <q-item clickable v-close-popup @click="makeAppointment(props.row)">
+                      <q-item-section avatar><q-icon name="event" /></q-item-section>
+                      <q-item-section>Appointment</q-item-section>
+                    </q-item>
+                  </q-list>
+                </q-btn-dropdown>
+              </q-td>
+            </template>
             </q-table>
+
+
+            <!-- View Profile Dialog -->
+            <q-dialog v-model="showProfileDialog">
+              <q-card style="min-width: 350px">
+                <q-card-section class="text-h6">
+                  Profile: {{ selectedPatient?.fname }} {{ selectedPatient?.lname }}
+                </q-card-section>
+              
+                <q-card-section>
+                  <div><strong>Gender:</strong> {{ selectedPatient?.gender }}</div>
+                  <div><strong>DOB:</strong> {{ selectedPatient?.dob }}</div>
+                </q-card-section>
+              
+                <q-card-actions align="right">
+                  <q-btn flat label="Close" color="primary" v-close-popup />
+                </q-card-actions>
+              </q-card>
+            </q-dialog>
+
+            <!-- Appointment Dialog -->
+            <q-dialog v-model="showAppointmentDialog">
+              <q-card style="min-width: 300px">
+                <q-card-section class="text-h6">
+                  Patient Name: {{ selectedPatient?.fname }} {{ selectedPatient?.lname }}
+                </q-card-section>
+              
+                <q-card-section>
+                  <q-input label="Date" outlined />
+                  <q-input label="Time" outlined class="q-mt-sm" />
+                </q-card-section>
+              
+                <q-card-actions align="right">
+                  <q-btn flat label="Cancel" color="primary" v-close-popup />
+                  <q-btn flat label="Confirm" color="primary" />
+                </q-card-actions>
+              </q-card>
+            </q-dialog>
 
           </q-card-section>
         </q-card>
@@ -54,12 +115,17 @@ const router = useRouter()
 const filter = ref('')
 const rows = ref([])
 
+const showProfileDialog = ref(false)
+const showAppointmentDialog = ref(false)
+const selectedPatient = ref(null)
+
 
 const columns = [
   { name: 'id', label: 'ID', field: 'id', align: 'left' },
   { name: 'name', label: 'Name', field: row => `${row.fname} ${row.lname}`, align: 'left' },
   { name: 'gender', label: 'Gender', field: 'gender', align: 'center' },
-  { name: 'dob', label: 'Date of Birth', field: 'dob', align: 'center' }
+  { name: 'dob', label: 'Date of Birth', field: 'dob', align: 'center' },
+  { name: 'actions', label: '', align: 'center', align: 'right', sortable: false }
 ]
 
 function GoToAddPatient() {
@@ -74,6 +140,16 @@ function loadPatients() {
     .catch(err => {
       console.error('Error', err)
     })
+}
+
+function viewProfile(row) {
+  selectedPatient.value = row
+  showProfileDialog.value = true
+}
+
+function makeAppointment(row) {
+  selectedPatient.value = row
+  showAppointmentDialog.value = true
 }
 
 
