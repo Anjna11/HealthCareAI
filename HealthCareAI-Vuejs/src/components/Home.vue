@@ -60,21 +60,29 @@
 
 <script setup>
 import '/mnt/anjna/workspace/Workspace/HealthCareAI/HealthCareAI-Vuejs/src/assets/app.css' 
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
 const filter = ref('')
 
+const rows = ref([])
 const columns = [
-  { name: 'time', label: 'Visit Time', field: 'time', align: 'left' },
-  { name: 'id', label: 'ID Number', field: 'id', align: 'left' },
-  { name: 'name', label: 'Name', field: 'name', align: 'left' },
+  { name: 'patient_id', label: 'ID', field: 'patient_id', align: 'left' },
+  { name: 'name', label: 'Name', field: row => `${row.fname} ${row.lname}`, align: 'left' },
   { name: 'gender', label: 'Gender', field: 'gender', align: 'center' },
-  { name: 'age', label: 'Age', field: 'age', align: 'center' },
-  { name: 'visitType', label: 'Visit Type', field: 'visitType', align: 'left' }
+  { name: 'dob', label: 'Date of Birth', field: 'dob', align: 'center' },
+  { name: 'Visit_name', label: 'Visit Type', field: 'Visit_name', align: 'left' },
+  { name: 'actions', label: '', align: 'center', align: 'right', sortable: false }
 ]
 
-const rows = [
-  { time: 'Today, 12:37 PM', id: '1000DAW', name: 'Teju K', gender: 'F', age: 28, visitType: 'OPD Visit' },
-  { time: 'Today, 06:57 AM', id: '1000C1H', name: 'CLARISSA YU', gender: 'F', age: 32, visitType: 'Facility Visit' },
-  { time: 'Today, 03:59 AM', id: '1000AP4', name: 'Megha Sharma', gender: 'M', age: 34, visitType: 'Facility Visit' },
-]
+function loadPatients() {
+  axios.get('http://localhost:8000/activePatients')
+    .then(res => {
+      rows.value = res.data
+    })
+    .catch(err => {
+      console.error('Error', err)
+    })
+}
+
+onMounted(loadPatients)
 </script>

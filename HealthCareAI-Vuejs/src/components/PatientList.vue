@@ -87,13 +87,13 @@
                 </q-card-section>
               
                 <q-card-section>
-                  <q-input label="Date" outlined />
-                  <q-input label="Time" outlined class="q-mt-sm" />
+                  <q-input label="Date And Time" outlined v-model="AppointmentStartDate"/>
+                  <q-input label="Visit Type" outlined v-model="AppointmentVisitType" class="q-mt-sm" />
                 </q-card-section>
               
                 <q-card-actions align="right">
                   <q-btn flat label="Cancel" color="primary" v-close-popup />
-                  <q-btn flat label="Confirm" color="primary" />
+                  <q-btn flat label="Confirm" color="primary" @click="confirmAppointment" />
                 </q-card-actions>
               </q-card>
             </q-dialog>
@@ -119,9 +119,11 @@ const showProfileDialog = ref(false)
 const showAppointmentDialog = ref(false)
 const selectedPatient = ref(null)
 
+const AppointmentStartDate = ref('')
+const AppointmentVisitType = ref('')
 
 const columns = [
-  { name: 'id', label: 'ID', field: 'id', align: 'left' },
+  { name: 'patient_id', label: 'ID', field: 'patient_id', align: 'left' },
   { name: 'name', label: 'Name', field: row => `${row.fname} ${row.lname}`, align: 'left' },
   { name: 'gender', label: 'Gender', field: 'gender', align: 'center' },
   { name: 'dob', label: 'Date of Birth', field: 'dob', align: 'center' },
@@ -135,6 +137,7 @@ function GoToAddPatient() {
 function loadPatients() {
   axios.get('http://localhost:8000/patients')
     .then(res => {
+      debugger;
       rows.value = res.data
     })
     .catch(err => {
@@ -150,6 +153,22 @@ function viewProfile(row) {
 function makeAppointment(row) {
   selectedPatient.value = row
   showAppointmentDialog.value = true
+}
+
+function confirmAppointment() {
+  axios.post('http://localhost:8000/makeAppointment', {
+    patient_id: selectedPatient.value.patient_id,
+    visitType_id: parseInt(AppointmentVisitType.value),
+    startTime: AppointmentStartDate.value
+  })
+  .then(() => {
+    showAppointmentDialog.value = false
+    AppointmentStartDate.value = ''
+    AppointmentVisitType.value = ''
+  })
+  .catch(err => {
+    console.error('Error creating appointment', err)
+  })
 }
 
 
